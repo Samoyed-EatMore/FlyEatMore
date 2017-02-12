@@ -6,13 +6,15 @@ using UnityEngine.UI;
 public class Playercontroller : MonoBehaviour {
 
 
-	Vector3 oldPos;// 记录位置
 	public float speed;// 前进速度
 	public float degree;// 旋转角
 	public Text countText;
+	public Text gameText;// 游戏结果
 
 	private Rigidbody rb;
 	private int count;
+
+	private bool isMoving = true;// 控制前进
 
 	void Start()
 	{
@@ -40,8 +42,9 @@ public class Playercontroller : MonoBehaviour {
 			rb.transform.Rotate (Vector3.left * -degree);
 		}
 
-		oldPos = transform.position;//记录位置
-		rb.transform.Translate(Vector3.forward * speed * Time.deltaTime);//移动
+		if(isMoving){
+		    rb.transform.Translate(Vector3.forward * speed * Time.deltaTime);//移动
+		}
 
 	}
 
@@ -54,6 +57,7 @@ public class Playercontroller : MonoBehaviour {
 			SetCountText ();
 		} else if (other.gameObject.CompareTag ("barrier")) {
 			//TODO
+			GameOver();
 		}			
 	}
 
@@ -63,4 +67,11 @@ public class Playercontroller : MonoBehaviour {
 		//TODO: speed up
 	}
 		
+	// Game over.
+	void GameOver ()
+	{
+		// Todo
+		isMoving = false;
+		gameText.text = "Game over! \n Your score is: " + count.ToString ();
+	}
 }
