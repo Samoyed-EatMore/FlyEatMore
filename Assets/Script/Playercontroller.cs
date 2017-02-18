@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class Playercontroller : MonoBehaviour {
 
-
-	public float speed;// 前进速度
-	public float degree;// 旋转角
+	private float speed = 5;// 前进速度
+	private float degree = 2;// 旋转角
+	private float dSpeed = 5;// 每次加速的变量，可设置为合理值
+	private float maxSpeed = 30;// 最大速度，可设置为合理值
 	public Text countText;
 	public Text gameText;// 游戏结果
 
@@ -48,15 +49,15 @@ public class Playercontroller : MonoBehaviour {
 
 	}
 
-	//TODO: 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
+	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.gameObject.CompareTag ("Food")) {
 			other.gameObject.SetActive (false);
 			count = count + 1;
 			SetCountText ();
+			SpeedUp ();
 		} else if (other.gameObject.CompareTag ("barrier")) {
-			//TODO
 			GameOver();
 		}			
 	}
@@ -64,13 +65,19 @@ public class Playercontroller : MonoBehaviour {
 	void SetCountText ()
 	{
 		countText.text = "Count: " + count.ToString ();
-		//TODO: speed up
 	}
 		
+	// Speed up
+	void SpeedUp ()
+	{
+		if (speed < maxSpeed) {
+			speed += dSpeed; 
+		}
+	}
+
 	// Game over.
 	void GameOver ()
 	{
-		// Todo
 		isMoving = false;
 		gameText.text = "Game over! \n Your score is: " + count.ToString ();
 	}
