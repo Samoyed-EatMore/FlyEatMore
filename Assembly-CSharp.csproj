@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\Playercontroller.cs" />
+     <Compile Include="Assets\Script\Rotator.cs" />
      <Compile Include="Assets\Water\Water\Scripts\Displace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\GerstnerDisplace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\MeshContainer.cs" />
