@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\Playercontroller.cs" />
+<<<<<<< HEAD
      <Compile Include="Assets\Script\Rotator.cs" />
      <Compile Include="Assets\Space Shooter\TutorialInfo\Scripts\TutorialInfo.cs" />
      <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_BGScroller.cs" />
@@ -59,6 +60,8 @@
      <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_PlayerController.cs" />
      <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_RandomRotator.cs" />
      <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_WeaponController.cs" />
+=======
+>>>>>>> parent of dabdc2c... merge
      <Compile Include="Assets\Water\Water\Scripts\Displace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\GerstnerDisplace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\MeshContainer.cs" />

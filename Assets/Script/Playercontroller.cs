@@ -7,8 +7,12 @@ public class Playercontroller : MonoBehaviour {
 
 	private float speed = 5;// 前进速度
 	private float degree = 2;// 旋转角
+<<<<<<< HEAD
 	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
 	private float totalDegree = 0;// vertical
+=======
+	private float dSpeed = 5;// 每次加速的变量，可设置为合理值
+>>>>>>> parent of dabdc2c... merge
 	private float maxSpeed = 30;// 最大速度，可设置为合理值
 	private float timeOutBefore = 0;
 	private float timeMoveBefore = 0;
