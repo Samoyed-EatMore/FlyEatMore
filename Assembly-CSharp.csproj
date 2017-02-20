@@ -46,7 +46,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\DestroyByBoundary.cs" />
+     <Compile Include="Assets\Script\DestroyByContact.cs" />
+     <Compile Include="Assets\Script\GameController.cs" />
+     <Compile Include="Assets\Script\Mover.cs" />
      <Compile Include="Assets\Script\Playercontroller.cs" />
+     <Compile Include="Assets\Script\RandomRotator.cs" />
      <Compile Include="Assets\Script\Rotator.cs" />
      <Compile Include="Assets\Water\Water\Scripts\Displace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\GerstnerDisplace.cs" />
