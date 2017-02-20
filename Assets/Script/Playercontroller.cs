@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Playercontroller : MonoBehaviour {
 
-	private float speed = 1;// 前进速度
+	public float speed;// 前进速度
 	private float degree = 2;// 旋转角
 	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
 	private float maxSpeed = 30;// 最大速度，可设置为合理值
