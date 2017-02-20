@@ -5,46 +5,70 @@ using UnityEngine.UI;
 
 public class Playercontroller : MonoBehaviour {
 
-	private float speed = 1;// 前进速度
+	private float speed = 5;// 前进速度
 	private float degree = 2;// 旋转角
 	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
+	private float totalDegree = 0;// vertical
 	private float maxSpeed = 30;// 最大速度，可设置为合理值
-	private float timeBefore = 0;
+	private float timeOutBefore = 0;
+	private float timeMoveBefore = 0;
 	private float maxPos = 75;// 最高位置
+	private float moveHorizontal;
+	private float moveVertical;
 	public Text countText;
 	public Text gameText;// 游戏结果
-	private bool isOutOfBound = false;// 边界
 
 	private Rigidbody rb;
 	private int count;
 
 	private bool isMoving = true;// 控制前进
+	private bool isOutOfBound = false;// 边界
 
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
 		count = 0;
 		SetCountText ();
-		timeBefore = Time.time;
+		timeOutBefore = Time.time;
+		timeMoveBefore = Time.time;
 	}
 
 	void FixedUpdate ()
 	{
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
 
-		// 转弯
-		if (moveHorizontal > 0) {
-			rb.transform.Rotate (Vector3.up * degree);
-		}
-		if (moveHorizontal < 0) {
-			rb.transform.Rotate (Vector3.up * -degree);
-		}
+		moveVertical = Input.GetAxis ("Vertical");
 		if (moveVertical > 0) {
+			totalDegree += degree;
 			rb.transform.Rotate (Vector3.left * degree);
 		}
 		if (moveVertical < 0) {
+			totalDegree -= degree;
 			rb.transform.Rotate (Vector3.left * -degree);
+		}
+
+		// 左右转弯，首先保持水平
+		if (totalDegree == 0) {
+			moveHorizontal = Input.GetAxis ("Horizontal");
+			// 左右转弯
+			if (moveHorizontal > 0) {
+				rb.transform.Rotate (Vector3.up * degree);
+			}
+			if (moveHorizontal < 0) {
+				rb.transform.Rotate (Vector3.up * -degree);
+			}
+			timeMoveBefore = Time.time;
+		} else {// 方向非水平，需调整
+			if (Time.time - timeMoveBefore > 0.05) {
+				if (totalDegree > 0) {
+					totalDegree -= degree;
+					rb.transform.Rotate (Vector3.left * -degree);
+				}
+				if (totalDegree < 0) {
+					totalDegree += degree;
+					rb.transform.Rotate (Vector3.left * degree);
+				}
+				timeMoveBefore = Time.time;
+			}
 		}
 
 		if(isMoving){
@@ -52,15 +76,15 @@ public class Playercontroller : MonoBehaviour {
 		}
 
 		if (isOutOfBound) {
-			if (Time.time - timeBefore == 1) {
+			if (Time.time - timeOutBefore == 1) {
 				gameText.text = "You'll lose in 3 seconds!";
-			} else if (Time.time - timeBefore == 2) {
+			} else if (Time.time - timeOutBefore == 2) {
 				gameText.text = "You'll lose in 2 seconds!";
-			} else if (Time.time - timeBefore == 3) {
+			} else if (Time.time - timeOutBefore == 3) {
 				gameText.text = "You'll lose in 1 seconds!";
-			} else if (Time.time - timeBefore == 4){
+			} else if (Time.time - timeOutBefore == 4){
 				gameText.text = "You'll lose in 0 seconds!";
-			} else if (Time.time - timeBefore > 5){
+			} else if (Time.time - timeOutBefore > 5){
 				if (rb.position.y > maxPos) { // confirm again
 					GameOver ();
 				} else {
@@ -69,7 +93,6 @@ public class Playercontroller : MonoBehaviour {
 				}
 			}
 		}
-
 	}
 
 	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
@@ -105,7 +128,7 @@ public class Playercontroller : MonoBehaviour {
 		isOutOfBound = !isOutOfBound;
 		if (isOutOfBound) {
 			gameText.text = "You'll lose the game \n if you keep on \n flying too high!";
-			timeBefore = Time.time;
+			timeOutBefore = Time.time;
 		} else {
 			ClearGameText ();
 		}
