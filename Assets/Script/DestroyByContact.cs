@@ -8,7 +8,7 @@ public class DestroyByContact : MonoBehaviour {
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.CompareTag( "Player")) {
-//			Instantiate(explosion, transform.position, transform.rotation);
+			Instantiate(explosion, transform.position, transform.rotation);
 		}
 	}
 }
