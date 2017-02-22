@@ -54,16 +54,6 @@
      <Compile Include="Assets\Script\RandomRotator.cs" />
      <Compile Include="Assets\Script\Rotator.cs" />
      <Compile Include="Assets\Space Shooter\TutorialInfo\Scripts\TutorialInfo.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_BGScroller.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_DestroyByBoundary.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_DestroyByContact.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_DestroyByTime.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_EvasiveManeuver.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_GameController.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_Mover.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_PlayerController.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_RandomRotator.cs" />
-     <Compile Include="Assets\Space Shooter\_Completed-Assets\Scripts\Done_WeaponController.cs" />
      <Compile Include="Assets\Water\Water\Scripts\Displace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\GerstnerDisplace.cs" />
      <Compile Include="Assets\Water\Water\Scripts\MeshContainer.cs" />
