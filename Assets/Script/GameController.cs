@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 	public GameObject hazard;
-	private Vector3 spawnValues = new Vector3 (20.0f, 20.0f, 50.0f);
+	private Vector3 spawnValues = new Vector3 (20,20,50);
 	public int hazardCount;
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
 	public Transform target;
+	public GameObject parent;
 
 	void Start ()
 	{
 		StartCoroutine (SpawnWaves ());
+	}
+
+	void FixedUpdate ()
+	{
+		transform.position = target.transform.position + new Vector3(0, 0, 20);
 	}
 
 	IEnumerator SpawnWaves ()
@@ -27,7 +33,8 @@ public class GameController : MonoBehaviour {
 //				Quaternion spawnRotation = Quaternion.identity;
 				Vector3 relativePos = spawnPosition - target.position;
 				Quaternion spawnRotation = Quaternion.LookRotation(relativePos);
-				Instantiate (hazard, spawnPosition, spawnRotation, transform);
+				GameObject relativePosition = Instantiate (parent, transform.position, transform.rotation);
+				Instantiate (hazard, spawnPosition, spawnRotation, relativePosition.transform);
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait);
