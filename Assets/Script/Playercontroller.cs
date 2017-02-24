@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Playercontroller : MonoBehaviour {
-
 	public float speed;// 前进速度
 	private float degree = 2;// 旋转角
 	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
@@ -112,6 +111,8 @@ public class Playercontroller : MonoBehaviour {
 			Destroy (other.gameObject);
 			//TODO: collision and animation Death
 			GameOver ();
+		} else if (other.gameObject.CompareTag ("MyOwnBoundary")) {
+			return;
 		}
 	}
 
