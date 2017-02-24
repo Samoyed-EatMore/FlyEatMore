@@ -116,13 +116,11 @@ public class Playercontroller : MonoBehaviour {
 			SetCountText ();
 			SpeedUp ();
 		} else if (other.gameObject.CompareTag ("barrier")) {
-			//TODO: animation Death
 			GameOver ();
 		} else if (other.gameObject.CompareTag ("Boundary")) {
 			OutOfBoundaryWarning ();
 		} else if (other.gameObject.CompareTag ("hazard")) {
 			Destroy (other.gameObject);
-			//TODO: collision and animation Death
 			GameOver ();
 		} else if (other.gameObject.CompareTag ("MyOwnBoundary")) {
 			return;
