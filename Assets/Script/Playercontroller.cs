@@ -11,21 +11,26 @@ public class Playercontroller : MonoBehaviour {
 	private float maxSpeed = 30;// 最大速度，可设置为合理值
 	private float timeOutBefore = 0;
 	private float timeMoveBefore = 0;
+	private float timeAttackBefore = 0;
 	private float maxPos = 75;// 最高位置
 	private float moveHorizontal;
 	private float moveVertical;
 	public Text countText;
 	public Text gameText;// 游戏结果
+	public Animator anim;// 物体动画
 
 	private Rigidbody rb;
 	private int count;
 
 	private bool isMoving = true;// 控制前进
 	private bool isOutOfBound = false;// 边界
+	private bool isAttack = false;// 攻击
 
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
+		anim.SetBool ("isDead", false);
+		anim.SetBool ("isAttack", false);
 		count = 0;
 		SetCountText ();
 		timeOutBefore = Time.time;
@@ -92,12 +97,20 @@ public class Playercontroller : MonoBehaviour {
 				}
 			}
 		}
+
+		if (isAttack && Time.time - timeAttackBefore > 0.5) {
+			anim.SetBool ("isAttack", false);
+			isAttack = false;
+		}
 	}
 
 	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
 	void OnTriggerEnter(Collider other) 
 	{
 		if (other.gameObject.CompareTag ("Food")) {
+			anim.SetBool ("isAttack", true);
+			isAttack = true;
+			timeAttackBefore = Time.time;
 			other.gameObject.SetActive (false);
 			count = count + 1;
 			SetCountText ();
@@ -146,6 +159,7 @@ public class Playercontroller : MonoBehaviour {
 	// Game over.
 	void GameOver ()
 	{
+		anim.SetBool ("isDead", true);
 		isMoving = false;
 		gameText.text = "Game over! \n Your score is: " + count.ToString ();
 	}
