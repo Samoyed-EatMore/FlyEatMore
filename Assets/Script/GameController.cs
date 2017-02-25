@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
 		{
 			for (int i = 0; i < hazardCount; i++)
 			{
-				Vector3 spawnPosition = transform.position + new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), Random.Range (-spawnValues.y, spawnValues.y), Random.Range (-spawnValues.z, spawnValues.z));
+				Vector3 spawnPosition = transform.position + Vector3.forward;//new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), Random.Range (-spawnValues.y, spawnValues.y), Random.Range (-spawnValues.z, spawnValues.z));
 //				Quaternion spawnRotation = Quaternion.identity;
 				Vector3 relativePos = spawnPosition - target.position;
 				Quaternion spawnRotation = Quaternion.LookRotation(relativePos);
