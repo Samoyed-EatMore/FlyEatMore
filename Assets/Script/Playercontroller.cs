@@ -19,11 +19,15 @@ public class Playercontroller : MonoBehaviour {
 	public Text gameText;// 游戏结果
 	public Animator anim;// 物体动画
 
+	public AudioClip audioDead;
+	public AudioClip audioEat;
+
 	private Rigidbody rb;
 	private int count;
 
 	private bool isMoving = true;// 控制前进
-	private bool isOutOfBound = false;// 边界
+	private bool isOutOfBound = false;// 上边界
+	private bool isOutOfEdge = false;// 侧面边界
 	private bool isAttack = false;// 攻击
 
 	public GameObject targetCamera;
@@ -92,7 +96,7 @@ public class Playercontroller : MonoBehaviour {
 				} else if (Time.time - timeOutBefore == 4) {
 					gameText.text = "You'll lose in 0 seconds!";
 				} else if (Time.time - timeOutBefore > 5) {
-					if (rb.position.y > maxPos) { // confirm again
+					if (rb.position.y > maxPos || isOutOfEdge) { // confirm again
 						GameOver ();
 					} else {
 						isOutOfBound = false;
@@ -113,24 +117,33 @@ public class Playercontroller : MonoBehaviour {
 	{		
 		if (targetCamera.activeInHierarchy) {
 			if (other.gameObject.CompareTag ("Food")) {
-				anim.SetBool ("isAttack", true);
-				isAttack = true;
-				timeAttackBefore = Time.time;
-				other.gameObject.SetActive (false);
-				count = count + 1;
-				SetCountText ();
-				SpeedUp ();
+				Eat (other);
 			} else if (other.gameObject.CompareTag ("barrier")) {
 				GameOver ();
 			} else if (other.gameObject.CompareTag ("Boundary")) {
 				OutOfBoundaryWarning ();
-			} else if (other.gameObject.CompareTag ("hazard")) {
+		    } else if (other.gameObject.CompareTag ("Edges")) {
+			    OutOfBoundaryWarning ();
+				isOutOfEdge = !isOutOfEdge;
+		    }
+			else if (other.gameObject.CompareTag ("hazard")) {
 				Destroy (other.gameObject);
 				GameOver ();
 			} else if (other.gameObject.CompareTag ("MyOwnBoundary")) {
 				return;
 			}
 		}
+	}
+
+	void Eat(Collider other){
+		anim.SetBool ("isAttack", true);
+		isAttack = true;
+		timeAttackBefore = Time.time;
+		other.gameObject.SetActive (false);
+		targetCamera.GetComponent<AudioSource> ().PlayOneShot (audioEat);
+		count = count + 1;
+		SetCountText ();
+		SpeedUp ();
 	}
 
 	void SetCountText ()
@@ -148,9 +161,11 @@ public class Playercontroller : MonoBehaviour {
 
 	// Out of Boundary 
 	void OutOfBoundaryWarning () {
+		if (rb.position.y > maxPos) {
+		}
 		isOutOfBound = !isOutOfBound;
 		if (isOutOfBound) {
-			gameText.text = "You'll lose the game \n if you keep on \n flying too high!";
+			gameText.text = "You'll lose the game \n if you keep on \n flying too far away!";
 			timeOutBefore = Time.time;
 		} else {
 			ClearGameText ();
@@ -163,8 +178,11 @@ public class Playercontroller : MonoBehaviour {
 	// Game over.
 	void GameOver ()
 	{
-		anim.SetBool ("isDead", true);
-		isMoving = false;
-		gameText.text = "Game over! \n Your score is: " + count.ToString ();
+		if (isMoving) {
+			targetCamera.GetComponent<AudioSource> ().PlayOneShot (audioDead);
+			anim.SetBool ("isDead", true);
+			isMoving = false;
+			gameText.text = "Game over! \n Your score is: " + count.ToString ();
+		}
 	}
 }
