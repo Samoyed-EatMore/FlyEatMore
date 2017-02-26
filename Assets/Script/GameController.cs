@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour {
 	{
 		//keep moving with crown
 		transform.position = target.transform.position + new Vector3(0, 0, 20);
+		transform.rotation = target.transform.rotation;
 	}
 
 	IEnumerator SpawnWaves ()
@@ -29,7 +30,8 @@ public class GameController : MonoBehaviour {
 		{
 			for (int i = 0; i < hazardCount; i++)
 			{
-				Vector3 spawnPosition = transform.position + Vector3.forward * 20 + Vector3.right * Random.Range (-20,20) + Vector3.up *  Random.Range (-10,10);//new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), Random.Range (-spawnValues.y, spawnValues.y), Random.Range (-spawnValues.z, spawnValues.z));
+				Vector3 temp = transform.TransformPoint (Vector3.forward * 1 + Vector3.right * Random.Range (-1,1));
+				Vector3 spawnPosition = temp;//new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), Random.Range (-spawnValues.y, spawnValues.y), Random.Range (-spawnValues.z, spawnValues.z));
 //				Quaternion spawnRotation = Quaternion.identity;
 				Vector3 relativePos = spawnPosition - target.position;
 				Quaternion spawnRotation = Quaternion.LookRotation(relativePos);
