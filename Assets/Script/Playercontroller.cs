@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class Playercontroller : MonoBehaviour {
 	public float speed;// 前进速度
-	private float degree = 2;// 旋转角
+//	private float degree = 2;// 旋转角
 	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
-	private float totalDegree = 0;// vertical
-	private float maxSpeed = 30;// 最大速度，可设置为合理值
+//	private float totalDegree = 0;// vertical
+	private float maxSpeed = 40;// 最大速度，可设置为合理值
 	private float timeOutBefore = 0;
 	private float timeMoveBefore = 0;
 	private float timeAttackBefore = 0;
@@ -18,6 +18,7 @@ public class Playercontroller : MonoBehaviour {
 	private float moveVertical;
 	public Text countText;
 	public Text gameText;// 游戏结果
+	public Text speedText;
 	public Animator anim;// 物体动画
 
 	public AudioClip audioDead;
@@ -28,7 +29,7 @@ public class Playercontroller : MonoBehaviour {
 
 	private bool isMoving = true;// 控制前进
 	private bool isOutOfBound = false;// 上边界
-	public bool isOutOfEdge = false;// 侧面边界
+	private bool isOutOfEdge = false;// 侧面边界
 	private bool isAttack = false;// 攻击
 	private bool dashing = false;
 
@@ -89,9 +90,10 @@ public class Playercontroller : MonoBehaviour {
 			bool triggered = GvrViewer.Instance.Triggered;
 			if (triggered) {
 				dashing = !dashing;
+				updateSpeedText ();
 			}
 			if (isMoving) {
-				float actualSpeed = dashing ? speed * 4 : speed;
+				float actualSpeed = dashing ? maxSpeed : speed;
 				rb.transform.Translate (targetCamera.transform.forward.normalized * actualSpeed * Time.deltaTime);//移动
 			}
 
@@ -127,6 +129,7 @@ public class Playercontroller : MonoBehaviour {
 		}
 	}
 
+//  Moved to Crow.cs
 //	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
 //	void OnTriggerEnter(Collider other) 
 //	{
@@ -163,7 +166,7 @@ public class Playercontroller : MonoBehaviour {
 
 	void SetCountText ()
 	{
-		countText.text = "Count: " + count.ToString ();
+		countText.text = "Score: " + count.ToString ();
 	}
 
 	// Speed up
@@ -171,6 +174,17 @@ public class Playercontroller : MonoBehaviour {
 	{
 		if (speed < maxSpeed) {
 			speed += dSpeed; 
+		}
+		updateSpeedText ();
+	}
+
+	void updateSpeedText() {
+		Debug.Log (dashing);
+		if (speed == maxSpeed || dashing) {
+			Debug.Log ("max");
+			speedText.text = "Speed: MAX\n";
+		} else {
+			speedText.text = "Speed: " + speed;
 		}
 	}
 
@@ -197,7 +211,11 @@ public class Playercontroller : MonoBehaviour {
 			targetCamera.GetComponent<AudioSource> ().PlayOneShot (audioDead);
 			anim.SetBool ("isDead", true);
 			isMoving = false;
-			gameText.text = "Game over! \n Your score is: " + count.ToString ();
+			gameText.text = "Game over! \n Your score is: " + count.ToString () + "\n\nPull the trigger to restart.";
 		}
+	}
+
+	public void changeIsOutOfEdge() {
+		isOutOfEdge = !isOutOfEdge;
 	}
 }

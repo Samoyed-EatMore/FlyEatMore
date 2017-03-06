@@ -29,7 +29,7 @@ public class Crow : MonoBehaviour
 				controller.OutOfBoundaryWarning ();
 			} else if (other.gameObject.CompareTag ("Edges")) {
 				controller.OutOfBoundaryWarning ();
-				controller.isOutOfEdge = !controller.isOutOfEdge;
+				controller.changeIsOutOfEdge ();
 			}
 			else if (other.gameObject.CompareTag ("hazard")) {
 				Destroy (other.gameObject);
