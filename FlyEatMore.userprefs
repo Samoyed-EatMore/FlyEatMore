@@ -2,11 +2,33 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/Playercontroller.cs">
     <Files>
-      <File FileName="Assets/Script/Playercontroller.cs" Line="164" Column="29" />
+      <File FileName="Assets/Script/Playercontroller.cs" Line="90" Column="59" />
       <File FileName="Assets/Sky FX Pack/Scripts/ScrollBehaviour.cs" Line="1" Column="1" />
       <File FileName="Assets/Script/GameController.cs" Line="1" Column="1" />
       <File FileName="Assets/Script/DestroyByBoundary.cs" Line="1" Column="1" />
+      <File FileName="Assets/GoogleVR/Scripts/EventSystem/GvrPointerGraphicRaycaster.cs" Line="47" Column="1" />
+      <File FileName="Assets/Script/Mover.cs" Line="14" Column="2" />
+      <File FileName="Assets/Script/CrowMovement.cs" Line="18" Column="50" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="FlyEatMore" expanded="True">
+            <Node name="Assembly-CSharp" expanded="True">
+              <Node name="Script" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State name="__root__">
+          <Node name="FlyEatMore" expanded="True" selected="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

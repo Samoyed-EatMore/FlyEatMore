@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Playercontroller : MonoBehaviour {
 	public float speed;// 前进速度
-	private float degree = 2;// 旋转角
+//	private float degree = 2;// 旋转角
 	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
-	private float totalDegree = 0;// vertical
-	private float maxSpeed = 30;// 最大速度，可设置为合理值
+//	private float totalDegree = 0;// vertical
+	private float maxSpeed = 40;// 最大速度，可设置为合理值
 	private float timeOutBefore = 0;
 	private float timeMoveBefore = 0;
 	private float timeAttackBefore = 0;
@@ -17,6 +18,7 @@ public class Playercontroller : MonoBehaviour {
 	private float moveVertical;
 	public Text countText;
 	public Text gameText;// 游戏结果
+	public Text speedText;
 	public Animator anim;// 物体动画
 
 	public AudioClip audioDead;
@@ -29,6 +31,7 @@ public class Playercontroller : MonoBehaviour {
 	private bool isOutOfBound = false;// 上边界
 	private bool isOutOfEdge = false;// 侧面边界
 	private bool isAttack = false;// 攻击
+	private bool dashing = false;
 
 	public GameObject targetCamera;
 
@@ -46,47 +49,56 @@ public class Playercontroller : MonoBehaviour {
 	void FixedUpdate ()
 	{
 		if (targetCamera.activeInHierarchy) {
-			moveHorizontal = Input.GetAxis ("Horizontal");
-			moveVertical = Input.GetAxis ("Vertical");
-			if (moveVertical > 0) {
-				totalDegree += degree;
-				rb.transform.Rotate (Vector3.left * degree);
-			}
-			if (moveVertical < 0) {
-				totalDegree -= degree;
-				rb.transform.Rotate (Vector3.left * -degree);
-			}
+//			moveHorizontal = Input.GetAxis ("Horizontal");
+//			moveVertical = Input.GetAxis ("Vertical");
+//			if (moveVertical > 0) {
+//				totalDegree += degree;
+//				rb.transform.Rotate (Vector3.left * degree);
+//			}
+//			if (moveVertical < 0) {
+//				totalDegree -= degree;
+//				rb.transform.Rotate (Vector3.left * -degree);
+//			}
+//
+//			// 左右转弯，首先保持水平
+//			if (totalDegree == 0) {
+//				moveHorizontal = Input.GetAxis ("Horizontal");
+//				// 左右转弯
+//				if (moveHorizontal > 0) {
+//					rb.transform.Rotate (Vector3.up * degree);
+//				}
+//				if (moveHorizontal < 0) {
+//					rb.transform.Rotate (Vector3.up * -degree);
+//				}
+//				timeMoveBefore = Time.time;
+//			} else {// 方向非水平，需调整
+//				if (Time.time - timeMoveBefore > 0.05) {
+//					if (totalDegree > 0) {
+//						totalDegree -= degree;
+//						rb.transform.Rotate (Vector3.left * -degree);
+//					}
+//					if (totalDegree < 0) {
+//						totalDegree += degree;
+//						rb.transform.Rotate (Vector3.left * degree);
+//					}
+//					timeMoveBefore = Time.time;
+//				}
+//			}
 
-			// 左右转弯，首先保持水平
-			if (totalDegree == 0) {
-				moveHorizontal = Input.GetAxis ("Horizontal");
-				// 左右转弯
-				if (moveHorizontal > 0) {
-					rb.transform.Rotate (Vector3.up * degree);
-				}
-				if (moveHorizontal < 0) {
-					rb.transform.Rotate (Vector3.up * -degree);
-				}
-				timeMoveBefore = Time.time;
-			} else {// 方向非水平，需调整
-				if (Time.time - timeMoveBefore > 0.05) {
-					if (totalDegree > 0) {
-						totalDegree -= degree;
-						rb.transform.Rotate (Vector3.left * -degree);
-					}
-					if (totalDegree < 0) {
-						totalDegree += degree;
-						rb.transform.Rotate (Vector3.left * degree);
-					}
-					timeMoveBefore = Time.time;
-				}
+			Quaternion rot = GvrViewer.Instance.HeadPose.Orientation;
+//			rb.transform.rotation = rot;
+			bool triggered = GvrViewer.Instance.Triggered;
+			if (triggered) {
+				dashing = !dashing;
+				updateSpeedText ();
 			}
-
 			if (isMoving) {
-				rb.transform.Translate (Vector3.forward * speed * Time.deltaTime);//移动
+				float actualSpeed = dashing ? maxSpeed : speed;
+				rb.transform.Translate (targetCamera.transform.forward.normalized * actualSpeed * Time.deltaTime);//移动
 			}
 
 			if (isOutOfBound) {
+				
 				if (Time.time - timeOutBefore == 1) {
 					gameText.text = "You'll lose in 3 seconds!";
 				} else if (Time.time - timeOutBefore == 2) {
@@ -103,39 +115,45 @@ public class Playercontroller : MonoBehaviour {
 						ClearGameText ();
 					}
 				}
+
 			}
 
 			if (isAttack && Time.time - timeAttackBefore > 0.5) {
 				anim.SetBool ("isAttack", false);
 				isAttack = false;
 			}
-		}
-	}
 
-	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
-	void OnTriggerEnter(Collider other) 
-	{		
-		if (targetCamera.activeInHierarchy) {
-			if (other.gameObject.CompareTag ("Food")) {
-				Eat (other);
-			} else if (other.gameObject.CompareTag ("barrier")) {
-				GameOver ();
-			} else if (other.gameObject.CompareTag ("Boundary")) {
-				OutOfBoundaryWarning ();
-		    } else if (other.gameObject.CompareTag ("Edges")) {
-			    OutOfBoundaryWarning ();
-				isOutOfEdge = !isOutOfEdge;
-		    }
-			else if (other.gameObject.CompareTag ("hazard")) {
-				Destroy (other.gameObject);
-				GameOver ();
-			} else if (other.gameObject.CompareTag ("MyOwnBoundary")) {
-				return;
+			if (anim.GetBool ("isDead") && triggered) {
+				SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
 			}
 		}
 	}
 
-	void Eat(Collider other){
+//  Moved to Crow.cs
+//	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
+//	void OnTriggerEnter(Collider other) 
+//	{
+//		if (targetCamera.activeInHierarchy) {
+//			if (other.gameObject.CompareTag ("Food")) {
+//				Eat (other);
+//			} else if (other.gameObject.CompareTag ("barrier")) {
+//				GameOver ();
+//			} else if (other.gameObject.CompareTag ("Boundary")) {
+//				OutOfBoundaryWarning ();
+//		    } else if (other.gameObject.CompareTag ("Edges")) {
+//			    OutOfBoundaryWarning ();
+//				isOutOfEdge = !isOutOfEdge;
+//		    }
+//			else if (other.gameObject.CompareTag ("hazard")) {
+//				Destroy (other.gameObject);
+//				GameOver ();
+//			} else if (other.gameObject.CompareTag ("MyOwnBoundary")) {
+//				return;
+//			}
+//		}
+//	}
+
+	public void Eat(Collider other){
 		anim.SetBool ("isAttack", true);
 		isAttack = true;
 		timeAttackBefore = Time.time;
@@ -148,7 +166,7 @@ public class Playercontroller : MonoBehaviour {
 
 	void SetCountText ()
 	{
-		countText.text = "Count: " + count.ToString ();
+		countText.text = "Score: " + count.ToString ();
 	}
 
 	// Speed up
@@ -157,10 +175,21 @@ public class Playercontroller : MonoBehaviour {
 		if (speed < maxSpeed) {
 			speed += dSpeed; 
 		}
+		updateSpeedText ();
+	}
+
+	void updateSpeedText() {
+		Debug.Log (dashing);
+		if (speed == maxSpeed || dashing) {
+			Debug.Log ("max");
+			speedText.text = "Speed: MAX\n";
+		} else {
+			speedText.text = "Speed: " + speed;
+		}
 	}
 
 	// Out of Boundary 
-	void OutOfBoundaryWarning () {
+	public void OutOfBoundaryWarning () {
 		if (rb.position.y > maxPos) {
 		}
 		isOutOfBound = !isOutOfBound;
@@ -176,13 +205,17 @@ public class Playercontroller : MonoBehaviour {
 		gameText.text = "";
 	}
 	// Game over.
-	void GameOver ()
+	public void GameOver ()
 	{
 		if (isMoving) {
 			targetCamera.GetComponent<AudioSource> ().PlayOneShot (audioDead);
 			anim.SetBool ("isDead", true);
 			isMoving = false;
-			gameText.text = "Game over! \n Your score is: " + count.ToString ();
+			gameText.text = "Game over! \n Your score is: " + count.ToString () + "\n\nPull the trigger to restart.";
 		}
+	}
+
+	public void changeIsOutOfEdge() {
+		isOutOfEdge = !isOutOfEdge;
 	}
 }
