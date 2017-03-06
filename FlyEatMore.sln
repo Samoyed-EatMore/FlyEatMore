@@ -1,9 +1,9 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlyEatMore", "Assembly-CSharp.csproj", "{81FA1D20-9C7D-94EF-E870-FC019CE6764C}"
+# Visual Studio 2008
+
+Project("{4E3CA84D-DD48-1067-80BA-0C9CCF43E666}") = "FlyEatMore", "Assembly-CSharp.csproj", "{81FA1D20-9C7D-94EF-E870-FC019CE6764C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlyEatMore", "Assembly-CSharp-Editor.csproj", "{451E0DC1-612E-6D1A-8336-8933294B2AFF}"
+Project("{4E3CA84D-DD48-1067-80BA-0C9CCF43E666}") = "FlyEatMore", "Assembly-CSharp-Editor.csproj", "{451E0DC1-612E-6D1A-8336-8933294B2AFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

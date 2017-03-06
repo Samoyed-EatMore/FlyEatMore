@@ -13,12 +13,17 @@ public class Playercontroller : MonoBehaviour {
 	private float timeOutBefore = 0;
 	private float timeMoveBefore = 0;
 	private float timeAttackBefore = 0;
+	private float timeShowRoundBefore = 0;
 	private float maxPos = 75;// 最高位置
 	private float moveHorizontal;
 	private float moveVertical;
+	private float count2NextRound = 1;
+
 	public Text countText;
 	public Text gameText;// 游戏结果
 	public Text speedText;
+	public Text roundText;
+
 	public Animator anim;// 物体动画
 
 	public AudioClip audioDead;
@@ -32,8 +37,12 @@ public class Playercontroller : MonoBehaviour {
 	private bool isOutOfEdge = false;// 侧面边界
 	private bool isAttack = false;// 攻击
 	private bool dashing = false;
+	private bool isNextRound = false;
+	private bool isTrrigerNextRound = false;
 
 	public GameObject targetCamera;
+	public GameObject food1;
+	public GameObject food2;
 
 	void Start()
 	{
@@ -98,7 +107,6 @@ public class Playercontroller : MonoBehaviour {
 			}
 
 			if (isOutOfBound) {
-				
 				if (Time.time - timeOutBefore == 1) {
 					gameText.text = "You'll lose in 3 seconds!";
 				} else if (Time.time - timeOutBefore == 2) {
@@ -112,10 +120,17 @@ public class Playercontroller : MonoBehaviour {
 						GameOver ();
 					} else {
 						isOutOfBound = false;
-						ClearGameText ();
+						ClearText (gameText);
 					}
 				}
+			}
 
+			if (isNextRound && !isTrrigerNextRound) {
+				if (Time.time - timeShowRoundBefore > 3) {
+					ClearText (roundText);
+					isNextRound = false;
+					isTrrigerNextRound = true;
+				}
 			}
 
 			if (isAttack && Time.time - timeAttackBefore > 0.5) {
@@ -164,6 +179,23 @@ public class Playercontroller : MonoBehaviour {
 		SpeedUp ();
 	}
 
+	public bool NextRound(){
+		if (!isTrrigerNextRound) {
+			if (count > count2NextRound) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+
+	public void SetRoundText (){
+		roundText.text = "Round 2!";
+		timeShowRoundBefore = Time.time;
+		isNextRound = true;
+	}
+
 	void SetCountText ()
 	{
 		countText.text = "Score: " + count.ToString ();
@@ -197,13 +229,14 @@ public class Playercontroller : MonoBehaviour {
 			gameText.text = "You'll lose the game \n if you keep on \n flying too far away!";
 			timeOutBefore = Time.time;
 		} else {
-			ClearGameText ();
+			ClearText (gameText);
 		}
 	}
 
-	void ClearGameText(){
-		gameText.text = "";
+	void ClearText(Text text){
+		text.text = "";
 	}
+
 	// Game over.
 	public void GameOver ()
 	{
