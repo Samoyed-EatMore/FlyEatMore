@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Crow : MonoBehaviour
 {
+	public GameObject explosion;
 	public Playercontroller controller;
 
 	// 给其他物体加上标签，本物体（与其他物体）碰撞时，实现相应动作
@@ -38,6 +39,7 @@ public class Crow : MonoBehaviour
 				}
 			}
 			else if (other.gameObject.CompareTag ("hazard")) {
+				Instantiate(explosion, transform.position, transform.rotation, transform);
 				Destroy (other.gameObject);
 				controller.GameOver ();
 			} else if (other.gameObject.CompareTag ("MyOwnBoundary")) {

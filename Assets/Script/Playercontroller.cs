@@ -43,10 +43,11 @@ public class Playercontroller : MonoBehaviour {
 	public GameObject targetCamera;
 	public GameObject food1;
 	public GameObject food2;
+	public GameObject crow;
 
 	void Start()
 	{
-			rb = GetComponent<Rigidbody> ();
+//			rb = GetComponent<Rigidbody> ();
 			anim.SetBool ("isDead", false);
 			anim.SetBool ("isAttack", false);
 			count = 0;
@@ -103,7 +104,7 @@ public class Playercontroller : MonoBehaviour {
 			}
 			if (isMoving) {
 				float actualSpeed = dashing ? maxSpeed : speed;
-				rb.transform.Translate (targetCamera.transform.forward.normalized * actualSpeed * Time.deltaTime);//移动
+				transform.Translate (targetCamera.transform.forward.normalized * actualSpeed * Time.deltaTime);//移动
 			}
 
 			if (isOutOfBound) {
@@ -116,7 +117,7 @@ public class Playercontroller : MonoBehaviour {
 				} else if (Time.time - timeOutBefore == 4) {
 					gameText.text = "You'll lose in 0 seconds!";
 				} else if (Time.time - timeOutBefore > 5) {
-					if (rb.position.y > maxPos || isOutOfEdge) { // confirm again
+					if (crow.transform.position.y > maxPos || isOutOfEdge) { // confirm again
 						GameOver ();
 					} else {
 						isOutOfBound = false;
@@ -222,7 +223,7 @@ public class Playercontroller : MonoBehaviour {
 
 	// Out of Boundary 
 	public void OutOfBoundaryWarning () {
-		if (rb.position.y > maxPos) {
+		if (crow.transform.position.y > maxPos) {
 		}
 		isOutOfBound = !isOutOfBound;
 		if (isOutOfBound) {

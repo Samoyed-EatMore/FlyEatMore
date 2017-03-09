@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 	public GameObject hazard;
+	public Transform parent;
 	private Vector3 spawnValues = new Vector3 (20,20,20);
 	public int hazardCount;
 	public float spawnWait;
@@ -35,7 +36,7 @@ public class GameController : MonoBehaviour {
 //				Quaternion spawnRotation = Quaternion.identity;
 				Vector3 relativePos = spawnPosition - target.position;
 				Quaternion spawnRotation = Quaternion.LookRotation(relativePos);
-				Instantiate (hazard, spawnPosition, spawnRotation);
+				Instantiate (hazard, spawnPosition, spawnRotation, parent);
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait);
