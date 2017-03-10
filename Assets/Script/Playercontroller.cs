@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class Playercontroller : MonoBehaviour {
 	public float speed;// 前进速度
 //	private float degree = 2;// 旋转角
-	private float dSpeed = 2;// 每次加速的变量，可设置为合理值
+	private float dSpeed = 1;// 每次加速的变量，可设置为合理值
 //	private float totalDegree = 0;// vertical
 	private float maxSpeed = 40;// 最大速度，可设置为合理值
 	private float timeOutBefore = 0;
@@ -47,7 +47,7 @@ public class Playercontroller : MonoBehaviour {
 
 	void Start()
 	{
-//			rb = GetComponent<Rigidbody> ();
+			rb = GetComponent<Rigidbody> ();
 			anim.SetBool ("isDead", false);
 			anim.SetBool ("isAttack", false);
 			count = 0;
@@ -95,7 +95,7 @@ public class Playercontroller : MonoBehaviour {
 //				}
 //			}
 
-			Quaternion rot = GvrViewer.Instance.HeadPose.Orientation;
+//			Quaternion rot = GvrViewer.Instance.HeadPose.Orientation;
 //			rb.transform.rotation = rot;
 			bool triggered = GvrViewer.Instance.Triggered;
 			if (triggered) {
@@ -104,7 +104,7 @@ public class Playercontroller : MonoBehaviour {
 			}
 			if (isMoving) {
 				float actualSpeed = dashing ? maxSpeed : speed;
-				transform.Translate (targetCamera.transform.forward.normalized * actualSpeed * Time.deltaTime);//移动
+				rb.transform.Translate (targetCamera.transform.forward.normalized * actualSpeed * Time.deltaTime * 1.5f);//移动
 			}
 
 			if (isOutOfBound) {
@@ -117,7 +117,7 @@ public class Playercontroller : MonoBehaviour {
 				} else if (Time.time - timeOutBefore == 4) {
 					gameText.text = "You'll lose in 0 seconds!";
 				} else if (Time.time - timeOutBefore > 5) {
-					if (crow.transform.position.y > maxPos || isOutOfEdge) { // confirm again
+					if (rb.position.y > maxPos || isOutOfEdge) { // confirm again
 						GameOver ();
 					} else {
 						isOutOfBound = false;
@@ -223,7 +223,7 @@ public class Playercontroller : MonoBehaviour {
 
 	// Out of Boundary 
 	public void OutOfBoundaryWarning () {
-		if (crow.transform.position.y > maxPos) {
+		if (rb.position.y > maxPos) {
 		}
 		isOutOfBound = !isOutOfBound;
 		if (isOutOfBound) {
